@@ -11,7 +11,7 @@ Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | ForEach-Object{
 Remove-Item (-join($mapGUIDirectory,'\mapGUI-master')) -Force -Recurse -Confirm:$false
 
 '\customizations\modules\','\operational\logs\' | ForEach-Object{
-    New-Item (-join($mapGUIDirectory,$_)) -ItemType Directory -Force
+    New-Item (-join($mapGUIDirectory,$_)) -ItemType Directory -Force | Out-Null
 }
 
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
