@@ -1,3 +1,7 @@
+$mapGUIDirectory = (-join($env:APPDATA,'\mapGUI\'))
+if(Test-Path $mapGUIDirectory){
+    Remove-Item $mapGUIDirectory -Force -Recurse -Confirm:$false
+}
 $mapGUIDirectory = New-Item (-join($env:APPDATA,'\mapGUI\')) -ItemType Directory
 
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
