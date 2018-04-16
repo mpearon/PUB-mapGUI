@@ -70,7 +70,7 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-
+        <Label Name="lbl_alert" Content='' Margin="1,0,380,0" Grid.Column="1" FontSize="26" FontWeight="Bold" Foreground="#FF970F0F" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         <Image Name="img_logo" Source="file://$((-join($customizationFile.workspace.applicationInfo.applicationRoot,'\customizations\images\',$customizationFile.company.organization.companyLogo)))" Grid.Column="1" Margin="488,0,1,0" HorizontalAlignment="Right" />
 
         <TabControl Name='tc_tabs' Grid.Row="1" Grid.ColumnSpan="2" Background="Transparent" BorderBrush="{x:Null}" Style="{StaticResource leftTab}">
