@@ -14,7 +14,6 @@ Remove-Item (-join($mapGUIDirectory,'\mapGUI-master')) -Force -Recurse -Confirm:
     New-Item (-join($mapGUIDirectory,$_)) -ItemType Directory -Force | Out-Null
 }
 
-[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/mpearon/PowerShell/master/Personal/StoryUp/StoryUpGUI/customizations/modules/storyUp.psm1' -OutFile (-join($mapGUIDirectory,'\customizations\modules\storyUp.psm1'))
 
 $customizationFile = Get-Item (-join($env:APPDATA,'\mapGUI\customizations\defaults.json'))
