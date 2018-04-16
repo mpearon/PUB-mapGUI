@@ -165,6 +165,7 @@ $masterRunspaceCode = {
                 $thisVar = $_.Name
                 $userValue = $_.Name -split('_')
                 $customizationFile.($userValue[2]).($userValue[3]).($userValue[4]) = ($_.Value.Text)
+                $customizationFile.firstRun = $false
                 Add-Content (-join($customizationFile.workspace.applicationInfo.applicationRoot,'/operational/logs/',(Get-Date -Format 'yyyMMddHHmmss'),'-configChange.log')) -Value "var: $($thisVar)`r`n   1: $($userValue[2])`r`n   2: $($userValue[3])`r`n   2: $($userValue[4])`r`n   Value: $($_.Value.Text)`r`n" -ErrorAction Stop
             }
             (-join('[',($customizationFile | ConvertTo-JSON -ErrorAction Stop),']')) | Out-File (-join($customizationFile.workspace.applicationInfo.applicationRoot,'/customizations/defaults.json')) -Force -ErrorAction Stop
@@ -176,7 +177,9 @@ $masterRunspaceCode = {
             Invoke-InRunspace -customizationFile $customizationFile -syncHash $syncHash -runspaceFunctions $runspaceFunctions -commandLine $codeBlock -statusIndicator 'img_configure_commitresult'
         }
     })
-
+    if($customizationFile.firstRun = $true){
+        $tc_tabs.SelectedIndex = "3"
+    }
     $syncHash.Window.ShowDialog()
     $Runspace.Close()
     $Runspace.Dispose()
