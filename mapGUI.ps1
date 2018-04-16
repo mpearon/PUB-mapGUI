@@ -36,6 +36,7 @@ $masterRunspaceCode = {
     #Form
     $btn_Exit.Add_Click({
         $syncHash.Window.Close()
+        Stop-Process $pid
     })
     $img_logo.Add_MouseLeftButtonDown({
         $syncHash.Window.DragMove()
