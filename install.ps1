@@ -1,8 +1,8 @@
 $mapGUIDirectory = (-join($env:APPDATA,'\mapGUI\'))
 if(Test-Path $mapGUIDirectory){
     if(Get-ChildItem $mapGUIDirectory){
-        New-Item -ItemType Directory (-join($mapGUIDirectory,'\backup\',(Get-Date -Format 'yyyyMMddHHmmss')))
-        Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Copy-Item -Destination (-join($mapGUIDirectory,'\backup\'))
+        $backupDirectory - New-Item -ItemType Directory (-join($mapGUIDirectory,'\backup\',(Get-Date -Format 'yyyyMMddHHmmss')))
+        Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Copy-Item -Destination $backupDirectory
         Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Remove-Item -Force -Recurse -Confirm:$false
         $backup = $true
     }
