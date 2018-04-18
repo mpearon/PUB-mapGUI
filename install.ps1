@@ -1,8 +1,14 @@
 $mapGUIDirectory = (-join($env:APPDATA,'\mapGUI\'))
 if(Test-Path $mapGUIDirectory){
-    Remove-Item $mapGUIDirectory -Force -Recurse -Confirm:$false
+    if(Get-ChildItem $mapGUIDirectory){
+        New-Item -ItemType Directory (-join($mapGUIDirectory,'\backup\',(Get-Date -Format 'yyyyMMddHHmmss')))
+        Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Copy-Item -Destination (-join($mapGUIDirectory,'\backup\'))
+        Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Remove-Item -Force -Recurse -Confirm:$false
+    }
 }
-$mapGUIDirectory = New-Item (-join($env:APPDATA,'\mapGUI\')) -ItemType Directory
+else{
+    $mapGUIDirectory = New-Item (-join($env:APPDATA,'\mapGUI\')) -ItemType Directory
+}
 
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
 Invoke-WebRequest -Uri 'https://github.com/mpearon/mapGUI/archive/master.zip' -OutFile (-join($mapGUIDirectory,'\mapGUI-Source.zip'))
@@ -13,10 +19,6 @@ Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | ForEach-Object{
     Move-Item $_.FullName -Destination $mapGUIDirectory
 }
 Remove-Item (-join($mapGUIDirectory,'\mapGUI-master')) -Force -Recurse -Confirm:$false
-
-'\customizations\modules\','\operational\logs\' | ForEach-Object{
-    New-Item (-join($mapGUIDirectory,$_)) -ItemType Directory -Force | Out-Null
-}
 
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/mpearon/PowerShell/master/Personal/StoryUp/StoryUpGUI/customizations/modules/storyUp.psm1' -OutFile (-join($mapGUIDirectory,'\customizations\modules\storyUp.psm1'))
 
