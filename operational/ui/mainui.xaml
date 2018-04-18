@@ -323,7 +323,9 @@
 
                     </TreeView>
                     <Button Name="btn_configure_commit" Content="Commit Changes" Width="140" Margin="313,363,307,0" />
-                    <Image Name="img_configure_commitresult" Source="{x:Null}" Margin="283,363,452,0"/>
+                    <Image Name="img_configure_commitresult" Source="{x:Null}" Margin="284,363,451,0"/>
+                    <Button Name="btn_configure_update" Content="Update Application" Width="140" Margin="500,363,120,0" />
+                    <Image Name="img_configure_updatealert" Source="{x:Null}" Margin="471,363,264,0"/>
                 </Grid>
             </TabItem>
         </TabControl>
