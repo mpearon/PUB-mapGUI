@@ -2,8 +2,8 @@ $mapGUIDirectory = (-join($env:APPDATA,'\mapGUI\'))
 if(Test-Path $mapGUIDirectory){
     if(Get-ChildItem $mapGUIDirectory){
         $backupDirectory = New-Item -ItemType Directory (-join($mapGUIDirectory,'\backup\',(Get-Date -Format 'yyyyMMddHHmmss')))
-        Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Copy-Item -Destination $backupDirectory
-        Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Remove-Item -Force -Recurse -Confirm:$false
+        Get-ChildItem $mapGUIDirectory | Where-Object { $_.FullName -notmatch 'backup' } | Copy-Item -Recurse -Destination $backupDirectory
+        Get-ChildItem $mapGUIDirectory | Where-Object { $_.FullName -notmatch 'backup' } | Remove-Item -Force -Recurse -Confirm:$false
         $backup = $true
     }
 }
@@ -17,14 +17,14 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::ExtractToDirectory((-join($mapGUIDirectory,'\mapGUI-Source.zip')), $mapGUIDirectory)
 Remove-Item (-join($mapGUIDirectory,'\mapGUI-Source.zip')) -Force -Recurse -Confirm:$false
 if($backup){
-    Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | Where-Object { $_.name -ne 'backup' } | ForEach-Object{
+    Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | Where-Object { $_.FullName -notmatch 'backup' } | ForEach-Object{
         Move-Item $_.FullName -Destination $mapGUIDirectory
     }
-    Copy-Item (-join($backupDirectory,'\customizations')) -Destination $mapGUIDirectory
+    Copy-Item (-join($backupDirectory,'\customizations')) -Recurse -Destination $mapGUIDirectory -Force
 }
 else{
     Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | ForEach-Object{
-        Move-Item $_.FullName -Destination $mapGUIDirectory
+        Move-Item $_.FullName -Destination $mapGUIDirectory -Force
     }
 }
 Remove-Item (-join($mapGUIDirectory,'\mapGUI-master')) -Force -Recurse -Confirm:$false
