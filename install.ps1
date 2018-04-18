@@ -4,6 +4,7 @@ if(Test-Path $mapGUIDirectory){
         New-Item -ItemType Directory (-join($mapGUIDirectory,'\backup\',(Get-Date -Format 'yyyyMMddHHmmss')))
         Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Copy-Item -Destination (-join($mapGUIDirectory,'\backup\'))
         Get-ChildItem $mapGUIDirectory | Where-Object { $_.name -ne 'backup' } | Remove-Item -Force -Recurse -Confirm:$false
+        $backup = $true
     }
 }
 else{
@@ -15,8 +16,15 @@ Invoke-WebRequest -Uri 'https://github.com/mpearon/mapGUI/archive/master.zip' -O
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::ExtractToDirectory((-join($mapGUIDirectory,'\mapGUI-Source.zip')), $mapGUIDirectory)
 Remove-Item (-join($mapGUIDirectory,'\mapGUI-Source.zip')) -Force -Recurse -Confirm:$false
-Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | ForEach-Object{
-    Move-Item $_.FullName -Destination $mapGUIDirectory
+if($backup){
+    Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | Where-Object { $_.name -ne 'backup' } | ForEach-Object{
+        Move-Item $_.FullName -Destination $mapGUIDirectory
+    }
+}
+else{
+    Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | ForEach-Object{
+        Move-Item $_.FullName -Destination $mapGUIDirectory
+    }
 }
 Remove-Item (-join($mapGUIDirectory,'\mapGUI-master')) -Force -Recurse -Confirm:$false
 
