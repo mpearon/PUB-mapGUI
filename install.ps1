@@ -20,6 +20,7 @@ if($backup){
     Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | Where-Object { $_.name -ne 'backup' } | ForEach-Object{
         Move-Item $_.FullName -Destination $mapGUIDirectory
     }
+    Copy-Item (-join($backupDirectory,'\customizations')) -Destination $mapGUIDirectory
 }
 else{
     Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | ForEach-Object{
