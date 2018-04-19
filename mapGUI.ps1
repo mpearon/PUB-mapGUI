@@ -182,6 +182,12 @@ $masterRunspaceCode = {
         $tc_tabs.SelectedIndex = "3"
         $lbl_alert.Content = 'First Run - Configuration'
     }
+
+    $btn_configure_update.Add_Click({
+        $codeBlock = "& (-join($env:APPDATA,'\mapGUI\install.ps1'))"
+        Invoke-InRunspace -customizationFile $customizationFile -syncHash $syncHash -runspaceFunctions $runspaceFunctions -commandLine $codeBlock -statusIndicator 'img_configure_commitresult'
+    })
+
     $syncHash.Window.ShowDialog()
     $Runspace.Close()
     $Runspace.Dispose()
