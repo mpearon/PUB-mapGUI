@@ -184,8 +184,10 @@ $masterRunspaceCode = {
     }
 
     $btn_configure_update.Add_Click({
-        $codeBlock = 'Start-Process PowerShell -ArgumentList "& Start-Sleep -Seconds 2; (-join($($env:APPDATA),"\mapGUI\install.ps1"))"'
-        Invoke-InRunspace -customizationFile $customizationFile -syncHash $syncHash -runspaceFunctions $runspaceFunctions -commandLine $codeBlock -statusIndicator 'img_configure_updatealert'
+        $codeBlock = 'Start-Sleep -Seconds 5; (-join($($env:APPDATA),"\mapGUI\install.ps1")'
+        Start-Process .\PowerShell -ArgumentList $codeBlock
+        $syncHash.Window.Close()
+        Stop-Process $pid
     })
 
     $syncHash.Window.ShowDialog()
