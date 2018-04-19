@@ -184,8 +184,8 @@ $masterRunspaceCode = {
     }
 
     $btn_configure_update.Add_Click({
-        $codeBlock = "& (-join($env:APPDATA,'\mapGUI\install.ps1'))"
-        Invoke-InRunspace -customizationFile $customizationFile -syncHash $syncHash -runspaceFunctions $runspaceFunctions -commandLine $codeBlock -statusIndicator 'img_configure_commitresult'
+        $codeBlock = "Start-Porcess PowerShell -ArgumentList (-join($($env:APPDATA),'\mapGUI\install.ps1'))"
+        Invoke-InRunspace -customizationFile $customizationFile -syncHash $syncHash -runspaceFunctions $runspaceFunctions -commandLine $codeBlock -statusIndicator 'img_configure_updatealert'
     })
 
     $syncHash.Window.ShowDialog()
