@@ -39,9 +39,17 @@ $customizationFileContents.workspace.applicationinfo.applicationRoot = ($customi
 $AppLocation = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $arguments = (-join($env:APPDATA,'\mapGUI\mapGUI.ps1'))
 $WshShell = New-Object -ComObject WScript.Shell
+#create appData shortcut
+$Shortcut = $WshShell.CreateShortcut(-join($env:APPDATA,'\mapGUI\mapGUI.lnk'))
+$Shortcut.TargetPath = $AppLocation
+$Shortcut.Arguments = "-windowStyle Hidden -noExit $Arguments"
+$Shortcut.Save()
+#create desktop shortcut
 $Shortcut = $WshShell.CreateShortcut("$Home\Desktop\mapGUI.lnk")
 $Shortcut.TargetPath = $AppLocation
 $Shortcut.Arguments = "-windowStyle Hidden -noExit $Arguments"
 $Shortcut.Save()
+
+
 
 Invoke-Item (-join($Home,'\Desktop\mapGUI.lnk'))
