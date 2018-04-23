@@ -189,6 +189,14 @@ $masterRunspaceCode = {
         Stop-Process $pid
     })
 
+    #Version Checking
+    [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
+    $installedRelease = Get-Content (-join($env:APPDATA,'\mapGUI\operational\release'))
+    $latestRelease = ((Invoke-WebRequest 'https://github.com/mpearon/mapGUI/releases').links | Where-Object { $_.innerText -match 'v\d\.\d' } | Select-Object -Last 1).innerText
+    if($installedRelease -lt $latestRelease){
+        [System.Console]::Beep(1200,100)
+    }
+
     $syncHash.Window.ShowDialog()
     $Runspace.Close()
     $Runspace.Dispose()
