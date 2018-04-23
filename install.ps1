@@ -50,6 +50,4 @@ $Shortcut.TargetPath = $AppLocation
 $Shortcut.Arguments = "-windowStyle Hidden -noExit $Arguments"
 $Shortcut.Save()
 
-
-
 Invoke-Item (-join($Home,'\Desktop\mapGUI.lnk'))

@@ -169,6 +169,7 @@ $masterRunspaceCode = {
                 Add-Content (-join($customizationFile.workspace.applicationInfo.applicationRoot,'/operational/logs/',(Get-Date -Format 'yyyMMddHHmmss'),'-configChange.log')) -Value "var: $($thisVar)`r`n   1: $($userValue[2])`r`n   2: $($userValue[3])`r`n   2: $($userValue[4])`r`n   Value: $($_.Value.Text)`r`n" -ErrorAction Stop
             }
             (-join('[',($customizationFile | ConvertTo-JSON -ErrorAction Stop),']')) | Out-File (-join($customizationFile.workspace.applicationInfo.applicationRoot,'/customizations/defaults.json')) -Force -ErrorAction Stop
+            $lbl_alert.Foreground = '#FF970F0F'
             $lbl_alert.Content = 'Restart Application'
             $codeBlock = 'return "Success"'
             Invoke-InRunspace -customizationFile $customizationFile -syncHash $syncHash -runspaceFunctions $runspaceFunctions -commandLine $codeBlock -statusIndicator 'img_configure_commitresult'
@@ -192,9 +193,12 @@ $masterRunspaceCode = {
     #Version Checking
     [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
     $installedRelease = Get-Content (-join($env:APPDATA,'\mapGUI\operational\release'))
-    $latestRelease = ((Invoke-WebRequest 'https://github.com/mpearon/mapGUI/releases').links | Where-Object { $_.innerText -match 'v\d\.\d' } | Select-Object -Last 1).innerText
+    $latestRelease = ((Invoke-WebRequest 'https://github.com/mpearon/mapGUI/releases' -ErrorAction SilentlyContinue).links | Where-Object { $_.innerText -match 'v\d\.\d' } | Select-Object -Last 1).innerText
     if($installedRelease -lt $latestRelease){
-        [System.Console]::Beep(1200,100)
+        $lbl_alert.Foreground = '#FFFACD'
+        $lbl_alert.Content = 'Update Available'
+        $codeBlock = 'return "Warning"'
+        Invoke-InRunspace -customizationFile $customizationFile -syncHash $syncHash -runspaceFunctions $runspaceFunctions -commandLine $codeBlock -statusIndicator 'img_configure_updatealert'
     }
 
     $syncHash.Window.ShowDialog()
