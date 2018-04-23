@@ -184,9 +184,7 @@ $masterRunspaceCode = {
     }
 
     $btn_configure_update.Add_Click({
-        #$codeBlock = 'Start-Sleep -Seconds 5; (-join($($env:APPDATA),"\mapGUI\install.ps1")'
-        #Start-Process PowerShell -ArgumentList $codeBlock
-        Start-Process PowerShell -ArgumentList "-noExit -Command `"&{ Start-Sleep -Seconds 5; & (-join(`$env:APPDATA,'\mapGUI\install.ps1'))}`""
+        Start-Process PowerShell -ArgumentList "-Command `"&{ Write-Host -ForegroundColor Red 'UPDATE IN PROGRESS'; & (-join(`$env:APPDATA,'\mapGUI\install.ps1'))}`""
         $syncHash.Window.Close()
         Stop-Process $pid
     })
