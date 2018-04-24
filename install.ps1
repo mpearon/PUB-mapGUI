@@ -6,7 +6,7 @@ if(Test-Path $mapGUIDirectory){
         Get-ChildItem $mapGUIDirectory | Where-Object { $_.FullName -notmatch 'backup' } | Remove-Item -Force -Recurse -Confirm:$false
         $backup = $true
     }
-}
+} `
 else{
     $mapGUIDirectory = New-Item (-join($env:APPDATA,'\mapGUI\')) -ItemType Directory
 }
@@ -18,18 +18,18 @@ Invoke-WebRequest -Uri (-join('https://github.com',($latestRelease.href))) -OutF
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::ExtractToDirectory((-join($mapGUIDirectory,'\mapGUI-Source.zip')), $mapGUIDirectory)
 Remove-Item (-join($mapGUIDirectory,'\mapGUI-Source.zip')) -Force -Recurse -Confirm:$false
+
 if($backup){
-    Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | Where-Object { $_.FullName -notmatch 'backup' } | ForEach-Object{
-        Move-Item $_.FullName -Destination $mapGUIDirectory
-    }
+    Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^mapGUI-' } | Push-Location
+    Get-ChildItem | Where-Object { $_.FullName -notmatch 'backup' } | Move-Item -Destination $mapGUIDirectory
     Copy-Item (-join($backupDirectory,'\customizations')) -Recurse -Destination $mapGUIDirectory -Force
 }
 else{
-    Get-ChildItem (-join($mapGUIDirectory,'\mapGUI-master')) | ForEach-Object{
-        Move-Item $_.FullName -Destination $mapGUIDirectory -Force
-    }
+    Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^mapGUI-' } | Push-Location
+    Get-ChildItem | Move-Item -Destination $mapGUIDirectory -Force
+    Pop-Location
 }
-Remove-Item (-join($mapGUIDirectory,'\mapGUI-master')) -Force -Recurse -Confirm:$false
+Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^mapGUI-' } | Remove-Item -Recurse -Force -Confirm:$false
 
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/mpearon/PowerShell/master/Personal/StoryUp/StoryUpGUI/customizations/modules/storyUp.psm1' -OutFile (-join($mapGUIDirectory,'\customizations\modules\storyUp.psm1'))
 
