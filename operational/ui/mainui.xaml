@@ -326,7 +326,7 @@
                     <Image Name="img_configure_commitresult" Source="{x:Null}" Margin="284,363,451,0"/>
                     <Button Name="btn_configure_update" Content="Update Application" Width="140" Margin="500,363,120,0" />
                     <Image Name="img_configure_updatealert" Source="{x:Null}" Margin="471,363,264,0"/>
-                    <Label Name="lbl_configure_currentversion" Content="" Foreground="$($accentColor)" FontSize="8" Margin="645,363,67,0" />
+                    <Label Name="lbl_configure_currentversion" Content="" Foreground="$($accentColor)" FontSize="10" Margin="645,363,67,0" />
                 </Grid>
             </TabItem>
         </TabControl>
