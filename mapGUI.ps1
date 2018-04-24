@@ -193,7 +193,8 @@ $masterRunspaceCode = {
     #Version Checking
     [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
     $installedRelease = Get-Content (-join($env:APPDATA,'\mapGUI\operational\release'))
-    $latestRelease = ((Invoke-WebRequest 'https://github.com/mpearon/mapGUI/releases' -ErrorAction SilentlyContinue).links | Where-Object { $_.innerText -match 'v\d\.\d' } | Select-Object -Last 1).innerText
+    $latestRelease = ((Invoke-WebRequest 'https://github.com/mpearon/mapGUI/releases' -ErrorAction SilentlyContinue).links | Where-Object { $_.innerText -match 'v\d\.\d' -and ($_.outerText -eq $_.innerText) } | Sort-Object innerHTML | Select-Object -Last 1).innerText
+
     if($installedRelease -lt $latestRelease){
         $lbl_alert.Foreground = '#FFFF00'
         $lbl_alert.Content = 'Update Available'
