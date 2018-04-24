@@ -195,7 +195,7 @@ $masterRunspaceCode = {
     $installedRelease = Get-Content (-join($env:APPDATA,'\mapGUI\operational\release'))
     $latestRelease = ((Invoke-WebRequest 'https://github.com/mpearon/mapGUI/releases' -ErrorAction SilentlyContinue).links | Where-Object { $_.innerText -match 'v\d\.\d' } | Select-Object -Last 1).innerText
     if($installedRelease -lt $latestRelease){
-        $lbl_alert.Foreground = '#FFFACD'
+        $lbl_alert.Foreground = '#FFFF00'
         $lbl_alert.Content = 'Update Available'
         $codeBlock = 'return "Warning"'
         Invoke-InRunspace -customizationFile $customizationFile -syncHash $syncHash -runspaceFunctions $runspaceFunctions -commandLine $codeBlock -statusIndicator 'img_configure_updatealert'
