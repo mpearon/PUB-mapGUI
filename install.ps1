@@ -6,7 +6,7 @@ if(Test-Path $mapGUIDirectory){
         Get-ChildItem $mapGUIDirectory | Where-Object { $_.FullName -notmatch 'backup' } | Remove-Item -Force -Recurse -Confirm:$false
         $backup = $true
     }
-} `
+}
 else{
     $mapGUIDirectory = New-Item (-join($env:APPDATA,'\mapGUI\')) -ItemType Directory
 }
