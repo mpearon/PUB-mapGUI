@@ -12,12 +12,11 @@ else{
 }
 
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
-$latestRelease = (Invoke-WebRequest -uri 'https://github.com/mpearon/mapGUI/releases/latest').links | Where-Object { $_.outerText -match '(zip)' }
-#Invoke-WebRequest -Uri 'https://github.com/mpearon/mapGUI/archive/master.zip' -OutFile (-join($mapGUIDirectory,'\mapGUI-Source.zip'))
-Invoke-WebRequest -Uri (-join('https://github.com',($latestRelease.href))) -OutFile (-join($mapGUIDirectory,'\mapGUI-Source.zip'))
+$latestRelease = (Invoke-WebRequest -uri 'https://github.com/mpearon/PUB-mapGUI/releases/latest').links | Where-Object { $_.outerText -match '(zip)' }
+Invoke-WebRequest -Uri (-join('https://github.com',($latestRelease.href))) -OutFile (-join($mapGUIDirectory,'\PUB-mapGUI-Source.zip'))
 Add-Type -AssemblyName System.IO.Compression.FileSystem
-[System.IO.Compression.ZipFile]::ExtractToDirectory((-join($mapGUIDirectory,'\mapGUI-Source.zip')), $mapGUIDirectory)
-Remove-Item (-join($mapGUIDirectory,'\mapGUI-Source.zip')) -Force -Recurse -Confirm:$false
+[System.IO.Compression.ZipFile]::ExtractToDirectory((-join($mapGUIDirectory,'\PUB-mapGUI-Source.zip')), $mapGUIDirectory)
+Remove-Item (-join($mapGUIDirectory,'\PUB-mapGUI-Source.zip')) -Force -Recurse -Confirm:$false
 
 if($backup){
     Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^mapGUI-' } | Push-Location
