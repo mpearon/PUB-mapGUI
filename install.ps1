@@ -31,7 +31,7 @@ else{
 }
 Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^PUB-mapGUI-' } | Remove-Item -Recurse -Force -Confirm:$false
 
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/mpearon/PUB-PowerShell/master/Personal/StoryUp/StoryUpGUI/customizations/modules/storyUp.psm1' -OutFile (-join($mapGUIDirectory,'\customizations\modules\storyUp.psm1'))
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/mpearon/PUB-PowerShell/master/Modules/Companies/StoryUp/storyUp.psm1' -OutFile (-join($mapGUIDirectory,'\customizations\modules\storyUp.psm1')) -ErrorAction SilentlyContinue
 
 $customizationFile = Get-Item (-join($env:APPDATA,'\mapGUI\customizations\defaults.json'))
 $customizationFileContents = Get-Content $customizationFile | ConvertFrom-Json
