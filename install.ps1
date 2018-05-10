@@ -19,13 +19,21 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 Remove-Item (-join($mapGUIDirectory,'\PUB-mapGUI-Source.zip')) -Force -Recurse -Confirm:$false
 
 if($backup){
-    Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^PUB-mapGUI-' } | Push-Location
+    $newVersion = Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^PUB-mapGUI-' } 
+    if($newVersion -eq $null){
+        $newVersion = Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^mapGUI-' } 
+    }
+    $newVersion | Push-Location
     Get-ChildItem | Where-Object { $_.FullName -notmatch 'backup' } | Move-Item -Destination $mapGUIDirectory
     Copy-Item (-join($backupDirectory,'\customizations')) -Recurse -Destination $mapGUIDirectory -Force
     Pop-Location
 }
 else{
-    Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^PUB-mapGUI-' } | Push-Location
+    $newVersion = Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^PUB-mapGUI-' } 
+    if($newVersion -eq $null){
+        $newVersion = Get-ChildItem $mapGUIDirectory | Where-Object { $_.PSIsContainer -and $_.Name -match '^mapGUI-' } 
+    }
+    $newVersion | Push-Location
     Get-ChildItem | Move-Item -Destination $mapGUIDirectory -Force
     Pop-Location
     Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/mpearon/PUB-PowerShell/master/Modules/Companies/StoryUp/storyUp.psm1' -OutFile (-join($mapGUIDirectory,'\customizations\modules\storyUp.psm1')) -ErrorAction SilentlyContinue
